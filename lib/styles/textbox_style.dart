@@ -1,34 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:mentz_startspots/controllers/page_controllers.dart';
 import 'package:mentz_startspots/home.dart';
 
 InputDecoration searchBoxDecoration() {
   return InputDecoration(
     hintText: 'Search',
-    hintStyle: TextStyle(
+    hintStyle: const TextStyle(
       color: Colors.grey,
     ),
     suffixIcon: IconButton(
-      icon: Icon(
+      icon: const Icon(
         Icons.search,
         color: Colors.grey,
       ),
       onPressed: () async {
-        await HomeScreen().controller.search();
+        if (const HomeScreen().controller.searchController.value.text.isNotEmpty && const HomeScreen().controller.searchController.value.text.length > 2) {
+          await const HomeScreen().controller.search();
+        } else {
+          const HomeScreen().controller.errorMessage.value = 'Search term must be at least 3 characters long';
+          print('Search term must be at least 3 characters long');
+        }
       },
     ),
+    errorText: const HomeScreen().controller.errorMessage.value.isNotEmpty ? const HomeScreen().controller.errorMessage.value : null,
     filled: true,
     fillColor: Colors.white,
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
+      borderSide: const BorderSide(
         color: Colors.white,
         width: 0,
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
+      borderSide: const BorderSide(
         color: Colors.white,
         width: 0,
       ),
