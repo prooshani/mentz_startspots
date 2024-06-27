@@ -14,6 +14,7 @@ InputDecoration searchBoxDecoration() {
       ),
       onPressed: () async {
         if (const HomeScreen().controller.searchController.value.text.isNotEmpty && const HomeScreen().controller.searchController.value.text.length > 2) {
+          FocusManager.instance.primaryFocus?.unfocus();
           await const HomeScreen().controller.search();
         } else {
           const HomeScreen().controller.errorMessage.value = 'Search term must be at least 3 characters long';

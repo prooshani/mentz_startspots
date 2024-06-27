@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -20,7 +21,6 @@ class HomeScreenController extends GetxController {
   RxString numLocation = ''.obs;
   RxList locationsList = [].obs;
   RxBool isSearching = false.obs;
-  RxBool expandedCard = false.obs;
 
   final String uri = 'mvv/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84%5BDD:ddddd%5D&type_sf=any&name_sf=';
   @override
@@ -33,55 +33,24 @@ class HomeScreenController extends GetxController {
     searchController.value.dispose();
   }
 
-  // ListTile locationTile(Map<String, dynamic> location, index) {
-  //   return ListTile(
-  //     dense: locationsList.length > 10 ? true : false,
-  //     tileColor: index.isEven ? const Color(0xff9d9d9c) : const Color(0xff878786),
-  //     isThreeLine: false,
-  //     leading: location['type'] == 'stop'
-  //         ? const Icon(
-  //             Icons.tram,
-  //             color: Colors.white,
-  //           )
-  //         : location['type'] == 'street'
-  //             ? Icon(
-  //                 MdiIcons.roadVariant,
-  //                 color: Colors.white,
-  //               )
-  //             : location['type'] == 'poi'
-  //                 ? const Icon(Icons.pin_drop, color: Colors.white)
-  //                 : location['type'] == 'suburb'
-  //                     ? Icon(MdiIcons.city, color: Colors.white)
-  //                     : null,
-  //     title: Text(
-  //       location['disassembledName'] ?? '',
-  //       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-  //       overflow: TextOverflow.ellipsis,
-  //     ),
-  //     subtitle: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           location['name'] ?? '',
-  //           style: const TextStyle(color: Colors.black87),
-  //           overflow: TextOverflow.ellipsis,
-  //         ),
-  //       ],
-  //     ),
-  //     trailing: Text(
-  //       location['type'] ?? '',
-  //       style: const TextStyle(color: Colors.black87),
-  //     ),
-  //   );
-  // }
-
   locationCard(Map<String, dynamic> location, index) {
+    RxBool expandedCard = false.obs;
+    RxBool expansionEnd = false.obs;
+    RxDouble extraHeight = 0.0.obs;
+    List stopsList = [];
+
+    location['assignedStops'] != null ? extraHeight.value = (location['assignedStops'].length * 20).toDouble() : extraHeight.value = 0.0;
+    location['assignedStops'] != null ? stopsList.addAll(location['assignedStops']) : stopsList.clear();
+
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: AnimatedContainer(
+      child: Obx(() => AnimatedContainer(
+          onEnd: () {
+            expandedCard.value ? expansionEnd.value = true : expansionEnd.value = false;
+          },
           curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 500),
-          height: expandedCard.value ? 120 : 90,
+          duration: const Duration(milliseconds: 400),
+          height: expandedCard.value ? 100 + extraHeight.value : 75,
           decoration: BoxDecoration(
             color: index.isEven ? const Color(0xff9d9d9c) : const Color(0xff878786),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -107,17 +76,57 @@ class HomeScreenController extends GetxController {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  location['name'] ?? '',
+                  location['parent']['name'] ?? '',
                   style: const TextStyle(color: Colors.black87),
                   overflow: TextOverflow.ellipsis,
                 ),
+                expandedCard.value
+                    ? Visibility(
+                        visible: expansionEnd.value,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(Icons.location_on, color: Colors.black87, size: 15),
+                                  Text(
+                                    '${location['coord'][0]}, ${location['coord'][1]}' ?? '',
+                                    style: const TextStyle(color: Colors.black87),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              location.containsKey('assignedStops')
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: SizedBox(
+                                        height: extraHeight.value,
+                                        child: ListView.builder(
+                                          itemCount: location['assignedStops'].length,
+                                          itemBuilder: (context, index) {
+                                            var stop = stopsList[index];
+                                            return assignedStopsInfo(stop);
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
-            trailing: Text(
-              location['type'] ?? '',
-              style: const TextStyle(color: Colors.black87),
+            trailing: IconButton(
+              icon: Icon(expandedCard.value ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+              onPressed: () {
+                expandedCard.value = !expandedCard.value;
+              },
             ),
-          )),
+          ))),
     );
   }
 
@@ -136,7 +145,9 @@ class HomeScreenController extends GetxController {
                         ? Icons.pin_drop
                         : type == 'suburb'
                             ? MdiIcons.city
-                            : null,
+                            : type == 'singlehouse'
+                                ? Icons.home
+                                : Icons.question_mark,
             color: Colors.white,
           ),
         ),
@@ -151,15 +162,31 @@ class HomeScreenController extends GetxController {
                         ? const Color(0xff46a318)
                         : type == 'suburb'
                             ? const Color(0xff11cabf)
-                            : null,
+                            : type == 'singlehouse'
+                                ? Colors.purple
+                                : Colors.redAccent,
           ),
           child: Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              type,
+              type == 'singlehouse' ? 'House' : type,
               style: const TextStyle(color: Colors.white),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget assignedStopsInfo(stop) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Icon(Icons.directions_bus, color: Colors.black87, size: 15),
+        Text(
+          '${stop['name']} (${stop['distance']}m)',
+          style: const TextStyle(color: Colors.black87),
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
