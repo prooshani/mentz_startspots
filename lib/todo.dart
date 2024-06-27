@@ -13,7 +13,7 @@
 // todo: auto-search after 3 characters or not pressed for 1 second
 //// show loading indicator while searching
 //// show search results in a listview
-
+// todo: Internet Connectivity check
 
 
 ///// Code's todo

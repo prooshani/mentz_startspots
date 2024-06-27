@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Mentz StartSpots',
       locale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       home: const SplashScreen(),

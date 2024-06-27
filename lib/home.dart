@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mentz_startspots/controllers/page_controllers.dart';
 import 'package:mentz_startspots/styles/textbox_style.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends GetView<HomeScreenController> {
   static const String id = 'Home_Screen';
@@ -12,23 +11,30 @@ class HomeScreen extends GetView<HomeScreenController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: null,
+          leading: const SizedBox(
+            width: 0,
+          ),
           backgroundColor: const Color(0xff017eb3),
+          centerTitle: true,
           title: const Text('Mentz StartSpots'),
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0, bottom: 15.0),
-              child: Obx(
-                () => Form(
-                  key: controller.formKey.value,
-                  child: TextField(
-                    controller: controller.searchController.value,
-                    decoration: searchBoxDecoration(),
-                    onChanged: (value) => {controller.searchController.value.text = value, controller.errorMessage.value = ''},
-                    style: const TextStyle(
-                      color: Colors.black,
+            Obx(
+              () => Container(
+                height: 65,
+                color: const Color(0xff017eb3),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: controller.formKey.value,
+                    child: TextField(
+                      controller: controller.searchController.value,
+                      decoration: searchBoxDecoration(),
+                      onChanged: (value) => {controller.searchController.value.text = value, controller.errorMessage.value = ''},
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -42,7 +48,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                           itemCount: controller.locationsList.length,
                           itemBuilder: (context, index) {
                             var location = controller.locationsList[index];
-                            return controller.locationTile(location, index);
+                            return controller.locationCard(location, index);
                           },
                         ),
                       )
