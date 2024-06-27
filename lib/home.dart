@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mentz_startspots/controllers/page_controllers.dart';
 import 'package:mentz_startspots/styles/textbox_style.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends GetView<HomeScreenController> {
   static const String id = 'Home_Screen';
@@ -12,13 +13,13 @@ class HomeScreen extends GetView<HomeScreenController> {
     return Scaffold(
         appBar: AppBar(
           leading: null,
-          backgroundColor: const Color(0xff9d9d9c),
+          backgroundColor: const Color(0xff017eb3),
           title: const Text('Mentz StartSpots'),
         ),
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0, bottom: 20.0),
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0, bottom: 15.0),
               child: Obx(
                 () => Form(
                   key: controller.formKey.value,
@@ -33,37 +34,22 @@ class HomeScreen extends GetView<HomeScreenController> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Obx(() => SingleChildScrollView(
                 child: controller.locationsList.isNotEmpty
                     ? SizedBox(
-                        height: Get.height * 0.7,
+                        height: Get.height * 0.75,
                         child: ListView.builder(
                           itemCount: controller.locationsList.length,
                           itemBuilder: (context, index) {
                             var location = controller.locationsList[index];
-                            return ListTile(
-                              dense: true,
-                              tileColor: index.isEven ? Colors.black26 : Colors.black87,
-                              isThreeLine: true,
-                              title: Text(
-                                location['disassembledName'] ?? '',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Text(
-                                'Name: ${location['name']}',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              trailing: Text(
-                                'Type: ${location['type']}',
-                              ),
-                            );
+                            return controller.locationTile(location, index);
                           },
                         ),
                       )
-                    : const Text('No locations found')))
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: controller.isSearching.value ? const CircularProgressIndicator() : const Text('No locations found'),
+                      )))
           ],
         ));
   }
