@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class HomeScreenController extends GetxController {
     RxDouble extraHeight = 0.0.obs;
     List stopsList = [];
 
-    location['assignedStops'] != null ? extraHeight.value = (location['assignedStops'].length * 20).toDouble() : extraHeight.value = 0.0;
+    location['assignedStops'] != null ? extraHeight.value = (location['assignedStops'].length * 22).toDouble() : extraHeight.value = 0.0;
     location['assignedStops'] != null ? stopsList.addAll(location['assignedStops']) : stopsList.clear();
 
     return Padding(
@@ -67,18 +68,22 @@ class HomeScreenController extends GetxController {
             //tileColor: index.isEven ? const Color(0xff9d9d9c) : const Color(0xff878786),
             isThreeLine: true,
             leading: leadingTitle(location['type']),
-            title: Text(
+            title: AutoSizeText(
               location['disassembledName'] ?? '',
               style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              minFontSize: 12,
+              maxFontSize: 16,
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                AutoSizeText(
                   location['parent']['name'] ?? '',
                   style: const TextStyle(color: Colors.black87),
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  minFontSize: 12,
+                  maxFontSize: 16,
                 ),
                 expandedCard.value
                     ? Visibility(
@@ -90,11 +95,10 @@ class HomeScreenController extends GetxController {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  const Icon(Icons.location_on, color: Colors.black87, size: 15),
+                                  const Icon(Icons.location_on, color: Colors.black87, size: 18),
                                   Text(
                                     '${location['coord'][0]}, ${location['coord'][1]}' ?? '',
                                     style: const TextStyle(color: Colors.black87),
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -183,10 +187,14 @@ class HomeScreenController extends GetxController {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Icon(Icons.directions_bus, color: Colors.black87, size: 15),
-        Text(
-          '${stop['name']} (${stop['distance']}m)',
-          style: const TextStyle(color: Colors.black87),
-          overflow: TextOverflow.ellipsis,
+        Flexible(
+          child: AutoSizeText(
+            '${stop['name']} (${stop['distance'] ?? '?'}m)',
+            style: const TextStyle(color: Colors.black87),
+            maxLines: 1,
+            minFontSize: 12,
+            maxFontSize: 16,
+          ),
         ),
       ],
     );
