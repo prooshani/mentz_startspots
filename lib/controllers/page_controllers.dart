@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class SplashScreenController extends GetxController {
   @override
@@ -16,22 +20,56 @@ class SplashScreenController extends GetxController {
 }
 
 class HomeScreenController extends GetxController {
+  final _connectionType = ConnectivityResult.none.obs;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription _streamSubscription;
+
+  ConnectivityResult get connectionType => _connectionType.value;
+
+  set connectionType(value) {
+    _connectionType.value = value;
+  }
+
   Rx<TextEditingController> searchController = TextEditingController().obs;
   Rx<GlobalKey> formKey = GlobalKey<FormState>().obs;
   RxString errorMessage = ''.obs;
   RxString numLocation = ''.obs;
   RxList locationsList = [].obs;
   RxBool isSearching = false.obs;
+  RxBool hasNetwork = false.obs;
 
   final String uri = 'mvv/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84%5BDD:ddddd%5D&type_sf=any&name_sf=';
   @override
   void onReady() async {
     searchController = TextEditingController().obs;
+    initConnectivityType();
+    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateState);
     super.onReady();
   }
 
   void onClosed() {
     searchController.value.dispose();
+    _streamSubscription.cancel();
+  }
+
+  Future<void> initConnectivityType() async {
+    late ConnectivityResult connectivityResult;
+    try {
+      connectivityResult = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      if (isClosed) {
+        print('Cannot check the net. error: $e');
+      }
+    }
+    return _updateState(connectivityResult);
+  }
+
+  Future<void> _updateState(result) async {
+    if (result == ConnectivityResult.none) {
+      hasNetwork.value = false;
+    } else {
+      hasNetwork.value = true;
+    }
   }
 
   locationCard(Map<String, dynamic> location, index) {
@@ -203,44 +241,55 @@ class HomeScreenController extends GetxController {
   Future search() async {
     locationsList.clear();
     isSearching.value = true;
+    if (hasNetwork.value) {
+      try {
+        var searchRequestUrl = Uri.https('mvvvip1.defas-fgi.de', '/mvv/XML_STOPFINDER_REQUEST', {
+          'language': 'de',
+          'outputFormat': 'RapidJSON',
+          'coordOutputFormat': 'WGS84[DD:ddddd]',
+          'type_sf': 'any',
+          'name_sf': searchController.value.text,
+        });
 
-    //print('Search for ${searchController.value.text}');
+        // print('the url is: $searchRequestUrl');
 
-    var searchRequestUrl = Uri.https('mvvvip1.defas-fgi.de', '/mvv/XML_STOPFINDER_REQUEST', {
-      'language': 'de',
-      'outputFormat': 'RapidJSON',
-      'coordOutputFormat': 'WGS84[DD:ddddd]',
-      'type_sf': 'any',
-      'name_sf': searchController.value.text,
-    });
+        // Await the http get response, then decode the json-formatted response.
+        var response = await http.get(searchRequestUrl);
+        if (response.statusCode == 200) {
+          isSearching.value = false;
+          //Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+          Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
 
-    // print('the url is: $searchRequestUrl');
+          locationsList.addAll(jsonResponse['locations']);
 
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(searchRequestUrl);
-    if (response.statusCode == 200) {
-      isSearching.value = false;
-      //Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+          // Sort results by matchQuality (higher is better match)
+          locationsList.sort((a, b) => b['matchQuality'].compareTo(a['matchQuality']));
 
-      locationsList.addAll(jsonResponse['locations']);
+          var locationCount = locationsList.length;
+          numLocation.value = locationCount.toString();
 
-      // Sort results by matchQuality (higher is better match)
-      locationsList.sort((a, b) => b['matchQuality'].compareTo(a['matchQuality']));
-
-      var locationCount = locationsList.length;
-      numLocation.value = locationCount.toString();
-
-      // print('Number of locations returned: $locationCount. \n');
-      // print('First location: ${locationsList[0]}');
-      // print('First location name: ${locationsList[0]['name']}');
-      // print(response.body);
+          // print('Number of locations returned: $locationCount. \n');
+          // print('First location: ${locationsList[0]}');
+          // print('First location name: ${locationsList[0]['name']}');
+          // print(response.body);
+        } else {
+          isSearching.value = false;
+          print('Request failed with status: ${response.statusCode}.');
+          //  print(response.body);
+          Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: ${response.statusCode}',
+              icon: const Icon(Icons.error), borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white70, snackPosition: SnackPosition.BOTTOM);
+        }
+      } catch (e) {
+        isSearching.value = false;
+        Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: $e',
+            icon: const Icon(Icons.error), borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white70, snackPosition: SnackPosition.BOTTOM);
+      }
     } else {
       isSearching.value = false;
-      print('Request failed with status: ${response.statusCode}.');
-      //  print(response.body);
-      Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: ${response.statusCode}',
-          borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white24, snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Error', 'No Network Connection! Please check your internet connection',
+          icon: const Icon(Icons.wifi_off), borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white70, snackPosition: SnackPosition.BOTTOM);
     }
   }
 }
+
+enum MConnectivityResult { none, wifi, mobile }
