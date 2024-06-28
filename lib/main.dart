@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // GetMaterialApp is a widget that provides access to GetX features.
+    // specificly the initial routes and the theme.
+
     return GetMaterialApp(
       navigatorKey: Get.key,
       onReady: () async {},

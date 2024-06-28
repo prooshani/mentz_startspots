@@ -4,6 +4,10 @@ import 'package:mentz_startspots/controllers/home_bindings.dart';
 import 'package:mentz_startspots/home.dart';
 import 'package:mentz_startspots/splash.dart';
 
+// This class is used to define the pages of the application
+// It is used in the main.dart file to define the pages of the application
+// This way we can expand the application with more pages in the future much more easily
+// The class is using GetX's GetPage class to define the pages
 class AppPages {
   static var list = [
     GetPage(
