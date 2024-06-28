@@ -1,7 +1,7 @@
 
 ///// UI's todo
 
-// todo: Change the icon to better one
+//// Change the logo to better one
 //// show error message in snackbar and below searchbox
 //// check responsive design for searchbox and listview
 //// add stops info if available

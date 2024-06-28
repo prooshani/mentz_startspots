@@ -11,12 +11,25 @@ class HomeScreen extends GetView<HomeScreenController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const SizedBox(
-            width: 0,
-          ),
+          leading: const SizedBox(),
           backgroundColor: const Color(0xff017eb3),
           centerTitle: true,
-          title: const Text('Mentz StartSpots'),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                "images/mentz_logo_dark.png",
+                scale: 6,
+              ),
+              const Text('StartSpots',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ))
+            ],
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
