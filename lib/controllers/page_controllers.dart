@@ -41,7 +41,7 @@ class HomeScreenController extends GetxController {
   final String uri = 'mvv/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84%5BDD:ddddd%5D&type_sf=any&name_sf=';
   @override
   void onReady() async {
-    searchController = TextEditingController().obs;
+    // searchController = TextEditingController().obs;
     initConnectivityType();
     _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateState);
     super.onReady();
@@ -211,7 +211,7 @@ class HomeScreenController extends GetxController {
           child: Padding(
             padding: const EdgeInsets.all(3.0),
             child: Text(
-              type == 'singlehouse' ? 'House' : type,
+              type == 'singlehouse' ? 'Building' : type,
               style: const TextStyle(color: Colors.white),
             ),
           ),
@@ -227,7 +227,7 @@ class HomeScreenController extends GetxController {
         const Icon(Icons.directions_bus, color: Colors.black87, size: 15),
         Flexible(
           child: AutoSizeText(
-            '${stop['name']} (${stop['distance'] ?? '?'}m)',
+            stop['distance'] != null ? '${stop['name']} (${stop['distance'] ?? '?'}m)' : '${stop['name']}',
             style: const TextStyle(color: Colors.black87),
             maxLines: 1,
             minFontSize: 12,

@@ -41,7 +41,7 @@ class SplashScreen extends GetView<SplashScreenController> {
                       Padding(
                         padding: const EdgeInsets.only(top: 15.0),
                         child: Image.asset(
-                          "images/logo-256-dark.png",
+                          "images/logo-256.png",
                           scale: 4,
                         ),
                       ),
