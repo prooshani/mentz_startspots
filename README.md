@@ -1,4 +1,4 @@
-# mentz_startspots
+# Mentz StartSpots
 
 MENTZ challenge for Flutter Developer Applicatnts
 
@@ -44,7 +44,7 @@ Make sure to briefley describe (in writing) the main decisions that went into yo
 
 - Correct function
 - Stability and performance
-- UD design
+- UI design
 - Usefulness of and rationale for the chosen solutions
 
 
@@ -52,17 +52,18 @@ Make sure to briefley describe (in writing) the main decisions that went into yo
 
 This project covers this areas of skills of a Flutter Application Developer:
 
-- Statemanagement, lifecycle, and ... development skills
-- Using API skills to send request to a RESTful API and decode the JSON response to show as results
-- UI/UX skills to show results both efficently and applicable for further developments
+- Statemanagement, lifecycle, and conditional development skills
+- Using API skills to send request to a RESTful API and decode its JSON response to display the results
+- UI/UX skills to display results both efficently and ready for further developments
 - Other skills like clean code, good commenting and structural design skills
 
 
 ## State Management
 
-The state management method used to develop this project is **GetX (V4.6.6)**.
-The main reason for using getx is its extensibility and being a light weight state manager for the current aspect of project.
+The state management method used to develop this project is based on **GetX (V4.6.6)**.
+The main reason for using GetX is its extensibility and being a light weight state manager for the current aspect of project.
 All the UI updates, routings, global variable definitions are observed and under control of the GetX.
+
 Because the main functionallity of the app is based on an **online API call**, I have also used **Connectivity_plus (V5.0.2)** to detect the device's Internet connectivity for better state management and prevent the exceptional issues for the main function of the app. To be brief, if no Internet, no search would perform.
 
 ## API calls
