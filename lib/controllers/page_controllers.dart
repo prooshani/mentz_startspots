@@ -113,8 +113,10 @@ class HomeScreenController extends GetxController {
             // decoration of the card
             color: index.isEven ? const Color(0xff9d9d9c) : const Color(0xff878786),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            border: const Border(
-              bottom: BorderSide(color: Colors.amber, width: 2), // Amber colored shadow for the card decoration
+            border: Border(
+              bottom: BorderSide(
+                  color: location['isBest'] == true ? Colors.greenAccent : Colors.amber,
+                  width: 3), // If the location isBest as a match result, the border color will be green. Otherwise, it will be amber
             ),
           ),
           child: ListTile(

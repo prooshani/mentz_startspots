@@ -48,15 +48,25 @@ Make sure to briefley describe (in writing) the main decisions that went into yo
 - Usefulness of and rationale for the chosen solutions
 
 
+### Overview
+
+This project covers this areas of skills of a Flutter Application Developer:
+
+- Statemanagement, lifecycle, and ... development skills
+- Using API skills to send request to a RESTful API and decode the JSON response to show as results
+- UI/UX skills to show results both efficently and applicable for further developments
+- Other skills like clean code, good commenting and structural design skills
 
 
-This project is a starting point for a Flutter application.
+## State Management
 
-A few resources to get you started if this is your first Flutter project:
+The state management method used to develop this project is GetX (V4.6.6).
+The main reason for using getx is its extensibility and being a light weight state manager for the current aspect of project.
+All the UI updates, routings, global variable definitions are observed and under control of the GetX.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## API calls
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The http package (V1.2.1) is used for API calls and due to the language of requests and responses which is de (Deutch) the whole response decoded using UTF8 to show special characters correctly in the UI.
+API url shows that it is a RESTful API and it is handled inside the bb search bb function from -- HomeScreen Controller --.
+
+
