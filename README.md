@@ -81,7 +81,7 @@ As a result, the project's folders and files defined accordingly.
 - **Styles**: At this part of project we have very few stylings but, for further expansions, you can use this folder to put styling files for different part of UI designs.
 - **Assets**: to unify the address of extra assets, like logo and other stuffs, a folder called assets added.
 
-### The Solution
+# The Solution
 
 According to the nature of the app at this level, it seems like that it would be a feature for a more complete **journey planning app** and the end-users should be able to decide about their starting point based on the results of their search term. 
 
@@ -123,7 +123,20 @@ About **AssignedStops**, which shown inside the extra information area, if the *
 There are several important information available in resssponses which can make the user's experience much more better. 
 **isBest** and **matchQuality** are 2 of these details that can affect user's experince positively. Therefore, I have decided to reflect these two parameters on my **UI designs**.
 
- -**isBest**: if the location defined as the best result for user's search term, the bottom border of the location card will be `#0969DA` light green, otherwise, it will be amber.
+ -**isBest**: if the location defined as the best result for user's search term, the bottom border of the location card will be light green, otherwise, it will be amber.
 
- -**matchQuality**: The whole response will be sorted based on the match quality (the higher, the better)  and will shown based on this sorting element. This way, we can be sure that the user will reach the better matches faster.
+ -**matchQuality**: The whole response will be sorted based on the *match quality* (the higher, the better)  and will display the list based on this sorting element. This way, we can be sure that the user will reach the better matches faster.
 
+
+## Suggestions and improvements
+
+This app is developed based on project criterias. However, it can be done even better with minor and major modifications.
+As I had no acces to the API's documentations, I was not able to optimise the search terms based on the API's characteristics. For example, it should lead to way better user experience if we could fire the search function in background while the user is typing without need to press the search button by the user itself.
+However, at some points, it would lead to an overload of the API server and services but can be handled by some micro services.
+
+Other improvement I can imagine is that, the location card could show a Google Maps location preview but, it has to be connected to the Google APIs which is out of the project's scope at the moment.
+
+[!IMPORTANT]
+The whole code developed in Visua Studio Code. The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code.
+**No other AI assisstance used to write any part of the app's code**
+**Hamed Prooshani**
