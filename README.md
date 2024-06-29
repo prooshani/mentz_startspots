@@ -140,13 +140,13 @@ Other improvement I can imagine is that, the location card could show a Google M
 ## Device and Versions
 > [!NOTE]
 > The whole code developed in Visua Studio Code on MacBook Pro M3 (Macos 15 Beta).
-> Flutter SDK version: 3.23.0-14.0-pre.74
-> Dart: 3.5.0
-> DevTools: 2.36.0
-> Xcode: 16.0 (Beta)
-> Visual Studio Code: 1.90.2
-> Android Studio: 2023.3
-> Android SDK: 30.0.3
+> - Flutter SDK version: 3.23.0-14.0-pre.74
+> - Dart: 3.5.0
+> - DevTools: 2.36.0
+> - Xcode: 16.0 (Beta)
+> - Visual Studio Code: 1.90.2
+> - Android Studio: 2023.3
+> - Android SDK: 30.0.3
 
 
 
