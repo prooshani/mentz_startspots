@@ -69,8 +69,8 @@ Because the main functionallity of the app is based on an **online API call**, I
 ## API calls
 
 The **http package (V1.2.1)** is used for API calls and due to the language of requests and responses which is *de* **(Deutch)** the whole response decoded using **UTF8** to show special characters correctly in the **UI**.
-API url shows that it is a **RESTful** API and it is handled inside the **search** function from * *HomeScreen Controller* *.
-The response of the API call is encoded as a **RapidJSON** format and decoded results will be extracted and stored locally inside a list of * *locations* * for further usages.
+API url shows that it is a **RESTful** API and it is handled inside the **search** function from *HomeScreen Controller*.
+The response of the API call is encoded as a **RapidJSON** format and decoded results will be extracted and stored locally inside a list of *locations* for further usages.
 
 ## Project Folders Structure
 
@@ -85,7 +85,7 @@ As a result, the project's folders and files defined accordingly.
 
 According to the nature of the app at this level, it seems like that it would be a feature for a more complete **journey planning app** and the end-users should be able to decide about their starting point based on the results of their search term. 
 
-While it looks that the API would response with * *available stops* *, the other type of locations also available for better understanding of the starting point. Therefore, the whole app, at this point, should be focused on only listing the matched locations with end-users' search term. However, in a real-life app, you can automatically suggest and show stops and locations based on user's device based GPS location for much better outcomes and user experiences.
+While it looks that the API would response with *available stops*, the other type of locations also available for better understanding of the starting point. Therefore, the whole app, at this point, should be focused on only listing the matched locations with end-users' search term. However, in a real-life app, you can automatically suggest and show stops and locations based on user's device based GPS location for much better outcomes and user experiences.
 
 As we are limited to the responses of the API call, we should design our UI based on the information we got from the responses.
 The response contains many different user-readable, such as the *name* of the *stop*, *locality* and *stop name*, and non-user-related informations like, *response id*, *matchQuality* and etc.
