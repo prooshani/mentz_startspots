@@ -198,55 +198,58 @@ class HomeScreenController extends GetxController {
   // This method will create the leading title widget of the location card based on the location's type
   // The type will passed to the method as a parameter
   Widget leadingTitle(type) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4.0),
-          // assign an icon to the type of the location
-          child: Icon(
-            type == 'stop'
-                ? Icons.tram
-                : type == 'street'
-                    ? MdiIcons.roadVariant
-                    : type == 'poi'
-                        ? Icons.pin_drop
-                        : type == 'suburb'
-                            ? MdiIcons.city
-                            : type == 'singlehouse'
-                                ? Icons.home
-                                : Icons.question_mark,
-            color: Colors.white,
-          ),
-        ),
-        Container(
-          // create a container to show the type of the location inside that like a chip for better user experience
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: type == 'stop'
-                ? const Color(0xff017eb3)
-                : type == 'street'
-                    ? const Color(0xff2a281f)
-                    : type == 'poi'
-                        ? const Color(0xff46a318)
-                        : type == 'suburb'
-                            ? const Color(0xff11cabf)
-                            : type == 'singlehouse'
-                                ? Colors.purple
-                                : Colors.redAccent,
-          ),
-          child: Padding(
-            // the text inside the container for the type of the location.
-            padding: const EdgeInsets.all(3.0),
-            child: Text(
-              type == 'singlehouse' ? 'Building' : type, // just singlehouse will be shown as Building for better reading experience
-              style: const TextStyle(color: Colors.white),
+    return Container(
+      width: 50,
+      // create a container to show the type of the location inside that for a better user experience
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: type == 'stop'
+            ? const Color(0xff017eb3)
+            : type == 'street'
+                ? const Color(0xff2a281f)
+                : type == 'poi'
+                    ? const Color(0xff46a318)
+                    : type == 'suburb'
+                        ? const Color(0xff11cabf)
+                        : type == 'singlehouse'
+                            ? Colors.purple
+                            : Colors.redAccent,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2.0, top: 2.0),
+            // assign an icon to the type of the location
+            child: Icon(
+              type == 'stop'
+                  ? Icons.tram
+                  : type == 'street'
+                      ? MdiIcons.roadVariant
+                      : type == 'poi'
+                          ? Icons.pin_drop
+                          : type == 'suburb'
+                              ? MdiIcons.city
+                              : type == 'singlehouse'
+                                  ? Icons.home
+                                  : Icons.question_mark,
+              color: Colors.white,
             ),
           ),
-        ),
-      ],
+          Padding(
+            // the text inside the container for the type of the location.
+            padding: const EdgeInsets.all(3.0),
+            child: AutoSizeText(
+              type == 'singlehouse' ? 'Building' : type, // just singlehouse will be shown as Building for better reading experience
+              style: const TextStyle(color: Colors.white),
+              minFontSize: 10,
+              maxLines: 1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

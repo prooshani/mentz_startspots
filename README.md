@@ -104,11 +104,24 @@ Regarding the project's criteria, we should show at least:
     - Locality (if available)
     - Additional information (Like coordinates and stop name and distance from the location)
 
-## non-readable Details:
+
+-**The location type**: There are several different types of the location available in responses. *Stop, Street, POI, Suburb and singleHouse*. I believe for better UI design and User experience, it is better to somehow categorize these types by showing them inside a **Colored Container** as the *Location's card Leading Item*.
+These way, users can detect the location type without even reading the type and just by looking at the color of Card's leading color.
+
+-**The location name**: According to the API's response, we have several different names for a location. One is just the location name, which is called *disassembeledname*, one is under parent item, which is related to *locality* of the location, and the other one is a combination of both *name* and the *locality*
+
+-**The locality**: The parameter *name* under the *parent* item of the response's locations is related to the name of the **locality** of the location. This detail will be shown under the **Location Name** inside the location card.
+
+-**More information**: At the far right edge of the Location's card, it is a **chrone down** icon which toggles between expansion state of the card. For more information about the location, I have decided to use AnimatedContainer for the card's container widget. If the user expand the card, the *more information* is available to read. At the moment only *coordination* and *available stops assigned to the location* are showing inside the extra information part of the card but, it would be used for any further feature we would add to our application.
+About **AssignedStops**, which shown inside the extra information area, if the *distance* to the station is available, it would be shown inisde a pair of parenthesis.
+
+
+## Non-readable Details:
 
 There are several important information available in resssponses which can make the user's experience much more better. 
 **isBest** and **matchQuality** are 2 of these details that can affect user's experince positively. Therefore, I have decided to reflect these two parameters on my **UI designs**.
 
  -**isBest**: if the location defined as the best result for search term, the bottom border of the location card will be green, otherwise, it will be yellow.
+
  -**matchQuality**: The whole response will be sorted based on the match quality (the higher, the better)  and will shown based on this sorting element. This way, we can be sure that the user will reach the better matches faster.
 
