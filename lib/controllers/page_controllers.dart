@@ -38,8 +38,8 @@ class HomeScreenController extends GetxController {
   RxBool isSearching = false.obs; // A boolean variable that will be true while the search is in progress. This variable is observed by Getx and will be update the UI when the search is in progress
   RxBool hasNetwork = false.obs; // An observed boolean variable that will be true if the device has an active network connection. In case of no network connection, the search will not be performed
 
-  // The URI of the search request. This URI will be used to search for locations in the MVV API
-  final String uri = 'mvv/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84%5BDD:ddddd%5D&type_sf=any&name_sf=';
+  // // The URI of the search request. This URI will be used to search for locations in the MVV API
+  // final String uri = 'mvv/XML_STOPFINDER_REQUEST?language=de&outputFormat=RapidJSON&coordOutputFormat=WGS84%5BDD:ddddd%5D&type_sf=any&name_sf=';
 
   @override
   void onReady() async {
@@ -280,12 +280,13 @@ class HomeScreenController extends GetxController {
       // try-catch block to handle the errors during the search
       try {
         // create the search request URL based on the user's input in the search box for API call
+        // This API which looks like a RESTful, is used to search for stop locations in the MVV API
         var searchRequestUrl = Uri.https('mvvvip1.defas-fgi.de', '/mvv/XML_STOPFINDER_REQUEST', {
           'language': 'de',
           'outputFormat': 'RapidJSON',
           'coordOutputFormat': 'WGS84[DD:ddddd]',
           'type_sf': 'any',
-          'name_sf': searchController.value.text,
+          'name_sf': searchController.value.text, // the user's input in the search box
         });
 
         // Await the http get response, then decode the json-formatted response.

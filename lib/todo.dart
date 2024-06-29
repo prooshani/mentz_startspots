@@ -21,5 +21,6 @@
 
 // todo: Remove the unused imports
 // todo: Remove print statements
-// todo: add final comments 
+// todo: add final comments
+// todo: real device testing 
 //// arrange locations by their matchQuality parameter
