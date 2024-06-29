@@ -136,7 +136,21 @@ However, at some points, it would lead to an overload of the API server and serv
 
 Other improvement I can imagine is that, the location card could show a Google Maps location preview but, it has to be connected to the Google APIs which is out of the project's scope at the moment.
 
+
+## Device and Versions
+> [!NOTE]
+> The whole code developed in Visua Studio Code on MacBook Pro M3 (Macos 15 Beta).
+> Flutter SDK version: 3.23.0-14.0-pre.74
+> Dart: 3.5.0
+> DevTools: 2.36.0
+> Xcode: 16.0 (Beta)
+> Visual Studio Code: 1.90.2
+> Android Studio: 2023.3
+> Android SDK: 30.0.3
+
+
+
 > [!IMPORTANT]
-> The whole code developed in Visua Studio Code. The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code. **No other AI assisstance used to write any part of the app's code**
+>  The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code. **No other AI assisstance used to write any part of the app's code**
 
 **Hamed Prooshani**
