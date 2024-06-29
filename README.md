@@ -136,6 +136,7 @@ However, at some points, it would lead to an overload of the API server and serv
 
 Other improvement I can imagine is that, the location card could show a Google Maps location preview but, it has to be connected to the Google APIs which is out of the project's scope at the moment.
 
-[!IMPORTANT]The whole code developed in Visua Studio Code. The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code.
-**No other AI assisstance used to write any part of the app's code**
+> [!IMPORTANT]
+> The whole code developed in Visua Studio Code. The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code. **No other AI assisstance used to write any part of the app's code**
+
 **Hamed Prooshani**
