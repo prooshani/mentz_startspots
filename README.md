@@ -68,32 +68,33 @@ Because the main functionallity of the app is based on an **online API call**, I
 
 ## API calls
 
-The http package (V1.2.1) is used for API calls and due to the language of requests and responses which is de (Deutch) the whole response decoded using **UTF8** to show special characters correctly in the **UI**.
-API url shows that it is a **RESTful** API and it is handled inside the **search** function from * *HomeScreen* * Controller__.
-The response of the API call is encoded as a **RapidJSON** format and decoded reults will be extracted and stored locally on inside a list of * *locations* * for further usages.
+The **http package (V1.2.1)** is used for API calls and due to the language of requests and responses which is *de* **(Deutch)** the whole response decoded using **UTF8** to show special characters correctly in the **UI**.
+API url shows that it is a **RESTful** API and it is handled inside the **search** function from * *HomeScreen Controller* *.
+The response of the API call is encoded as a **RapidJSON** format and decoded results will be extracted and stored locally inside a list of * *locations* * for further usages.
 
 ## Project Folders Structure
 
-According to the projects definitions, it is a **part** of a application. Therefore, we should always preserve epace for any further expansion and modification of the project.
+According to the project's definitions, it is potentially a **part** of an **application**. Therefore, we should always preserve space for any further expansion and modification of the project.
 As a result, the project's folders and files defined accordingly.
-- **Screens**: While it looks like that we only have one screen, there is a folder called screens. If any new screen should add to the app, we can create a new screen file at this folder and it make the project's structure looks tidy,
+- **Screens**: While it looks like that we only have one screen, there is a folder called screens. In case of any new screen demand for the app, we can create a new screen file at this folder and it make the project's structure looks tidy,
 - **Controller**: Each screen should have its own controller for better implementations and code readability.
 - **Styles**: At this part of project we have very few stylings but, for further expansions, you can use this folder to put styling files for different part of UI designs.
--- **Assets**: to unify the address of extra assets, like logo andother stuff, a folder called assets added.
+- **Assets**: to unify the address of extra assets, like logo and other stuffs, a folder called assets added.
 
 ### The Solution
 
-According to the nature of the app at this level, it seems like that it would be a feature for a more complete app for **journey planning app** and the end-users should be able to decide about their starting point based on results of their search term. 
-While it looks the API would response with * *available stops* *, the other type of locations also available for better understanding of the starting point. Therefore, the whole app, at this point, should be focused on only listing the matched locations with end-users' search term. However, in a real-life app, you can automatically suggest and show stops and locations based on user's device based GPS location for much better outcomes and user experiences.
+According to the nature of the app at this level, it seems like that it would be a feature for a more complete **journey planning app** and the end-users should be able to decide about their starting point based on the results of their search term. 
+
+While it looks that the API would response with * *available stops* *, the other type of locations also available for better understanding of the starting point. Therefore, the whole app, at this point, should be focused on only listing the matched locations with end-users' search term. However, in a real-life app, you can automatically suggest and show stops and locations based on user's device based GPS location for much better outcomes and user experiences.
 
 As we are limited to the responses of the API call, we should design our UI based on the information we got from the responses.
-The response contains many different user-readable, such as the name of stop, locality and stop name, and non user related informations like, response id matchQuality and etc.
+The response contains many different user-readable, such as the *name* of the *stop*, *locality* and *stop name*, and non-user-related informations like, *response id*, *matchQuality* and etc.
 
-For better **User Experience**, I have decided to show user-readable details inside a list of **Cards** and also, reflect the non-user-readable details in the **UI design**.
+For better **User Experience**, I have decided to show user-readable details inside a list of **Cards** and also, reflect the non-user-readable details in my **UI design**.
 
 *Why Cards?* Because the details and information we are going to display are mostly in text format and we need to somehow wrap these detials for each location inside an item for better **UI design** and unifying the results.
-Additionally, this way, we have a lot of flexibility for any further expansions and design related modifications.
-Functions like, Go to the point or show on the map and many other functionalities could be easily implement into the card's container accordingly.
+Additionally, this way, we have a lot of flexibilities for any further expansions and design related modifications.
+Functions like, *Go to the point* or *show on the map* and many other functionalities could be easily implement into the card's container accordingly.
 
 
 ## Readable Details:
@@ -106,15 +107,15 @@ Regarding the project's criteria, we should show at least:
     - Additional information (Like coordinates and stop name and distance from the location)
 
 
--**The location type**: There are several different types of the location available in responses. *Stop, Street, POI, Suburb and singleHouse*. I believe for better UI design and User experience, it is better to somehow categorize these types by showing them inside a **Colored Container** as the *Location's card Leading Item*.
+-**The location type**: There are several different types of the location available in responses. *Stop, Street, POI, Suburb and singleHouse*. I believe, for better UI design and User experience, it is better to somehow categorize these types by showing them inside a **Colored Container** as the *Location's card Leading Item*.
 These way, users can detect the location type without even reading the type and just by looking at the color of Card's leading color.
 
--**The location name**: According to the API's response, we have several different names for a location. One is just the location name, which is called *disassembeledname*, one is under parent item, which is related to *locality* of the location, and the other one is a combination of both *name* and the *locality*
+-**The location name**: According to the API's response, we have several different name parameters for a location. One is just the location name, which is called *disassembeledName*, one is under parent item, which is related to *locality* of the location, and the other one is a combination of both *name* and the *locality*. Because we display the location name and locality in 2 separate Text Wdigets, we need to display the *disassembeledName* for the **location name**.
 
--**The locality**: The parameter *name* under the *parent* item of the response's locations is related to the name of the **locality** of the location. This detail will be shown under the **Location Name** inside the location card.
+-**The locality**: The parameter *name* under the *parent* item of the locations' item is related to the name of the **locality** of the location. This detail will be shown under the **Location Name** inside the location card.
 
--**More information**: At the far right edge of the Location's card, it is a **chrone down** icon which toggles between expansion state of the card. For more information about the location, I have decided to use AnimatedContainer for the card's container widget. If the user expand the card, the *more information* is available to read. At the moment only *coordination* and *available stops assigned to the location* are showing inside the extra information part of the card but, it would be used for any further feature we would add to our application.
-About **AssignedStops**, which shown inside the extra information area, if the *distance* to the station is available, it would be shown inisde a pair of parenthesis.
+-**More information**: At the far right edge of the Location's card, there is a **chrone down** icon which toggles between expansion state of the card. For more information about the location, I have decided to use *AnimatedContainer* for the card's container widget. If the user expand the card, the *more information* is available to read by expanding the card's container. At the moment only *coordination* and *available stops assigned to the location* are showing inside the extra information part of the card but, it would be used for any further feature we would add to our application.
+About **AssignedStops**, which shown inside the extra information area, if the *distance* to the station is available, it would be shown inisde a pair of parenthesis at the end of *assignedStop* name widget.
 
 
 ## Non-readable Details:
@@ -122,7 +123,7 @@ About **AssignedStops**, which shown inside the extra information area, if the *
 There are several important information available in resssponses which can make the user's experience much more better. 
 **isBest** and **matchQuality** are 2 of these details that can affect user's experince positively. Therefore, I have decided to reflect these two parameters on my **UI designs**.
 
- -**isBest**: if the location defined as the best result for search term, the bottom border of the location card will be green, otherwise, it will be yellow.
+ -**isBest**: if the location defined as the best result for user's search term, the bottom border of the location card will be `#0969DA` light green, otherwise, it will be amber.
 
  -**matchQuality**: The whole response will be sorted based on the match quality (the higher, the better)  and will shown based on this sorting element. This way, we can be sure that the user will reach the better matches faster.
 
