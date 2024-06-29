@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mentz_startspots/home.dart';
+import 'package:mentz_startspots/screens/home.dart';
 
 // This is the decoration of the search box also, it includes input decoration, validation and search function call
 InputDecoration searchBoxDecoration() {

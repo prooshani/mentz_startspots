@@ -108,7 +108,7 @@ class HomeScreenController extends GetxController {
           curve: Curves.easeInOut,
           duration: const Duration(milliseconds: 400),
           // If the location has no stops, the card height will be 75 pixels. On expanded, the card height will be 100 pixels. If the location has stops, the card height will be 100 + (22 * number of stops) pixels
-          height: expandedCard.value ? 100 + extraHeight.value : 75, //
+          height: expandedCard.value ? 100 + extraHeight.value : 70, //
           decoration: BoxDecoration(
             // decoration of the card
             color: index.isEven ? const Color(0xff9d9d9c) : const Color(0xff878786),

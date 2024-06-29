@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:mentz_startspots/controllers/app_pages.dart';
 import 'package:mentz_startspots/controllers/app_routes.dart';
 import 'package:mentz_startspots/controllers/home_bindings.dart';
-import 'package:mentz_startspots/home.dart';
-import 'package:mentz_startspots/splash.dart';
+import 'package:mentz_startspots/screens/home.dart';
+import 'package:mentz_startspots/screens/splash.dart';
 
 void main() {
   runApp(const MyApp());

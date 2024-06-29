@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mentz_startspots/controllers/page_controllers.dart';
-import 'package:mentz_startspots/home.dart';
+import 'package:mentz_startspots/screens/home.dart';
 
 // This is the splash screen widget which is the first screen that the user sees when the app is opened
 // It will show the MENTZ logo, the app's title and the app's logo

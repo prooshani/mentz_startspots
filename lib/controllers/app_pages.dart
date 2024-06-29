@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mentz_startspots/controllers/app_routes.dart';
 import 'package:mentz_startspots/controllers/home_bindings.dart';
-import 'package:mentz_startspots/home.dart';
-import 'package:mentz_startspots/splash.dart';
+import 'package:mentz_startspots/screens/home.dart';
+import 'package:mentz_startspots/screens/splash.dart';
 
 // This class is used to define the pages of the application
 // It is used in the main.dart file to define the pages of the application

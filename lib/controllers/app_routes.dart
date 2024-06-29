@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mentz_startspots/home.dart';
-import 'package:mentz_startspots/splash.dart';
+import 'package:mentz_startspots/screens/home.dart';
+import 'package:mentz_startspots/screens/splash.dart';
 
 // This class is used to define the routes of the application
 // It is used in the main.dart file to define the routes of the application
