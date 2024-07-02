@@ -216,31 +216,30 @@ class HomeScreenController extends GetxController {
                             : Colors.redAccent,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 2.0, top: 2.0),
-            // assign an icon to the type of the location
-            child: Icon(
-              type == 'stop'
-                  ? Icons.tram
-                  : type == 'street'
-                      ? MdiIcons.roadVariant
-                      : type == 'poi'
-                          ? Icons.pin_drop
-                          : type == 'suburb'
-                              ? MdiIcons.city
-                              : type == 'singlehouse'
-                                  ? Icons.home
-                                  : Icons.question_mark,
-              color: Colors.white,
-            ),
+          const SizedBox(
+            height: 2,
+          ),
+          Icon(
+            type == 'stop'
+                ? Icons.tram
+                : type == 'street'
+                    ? MdiIcons.roadVariant
+                    : type == 'poi'
+                        ? Icons.pin_drop
+                        : type == 'suburb'
+                            ? MdiIcons.city
+                            : type == 'singlehouse'
+                                ? Icons.home
+                                : Icons.question_mark,
+            color: Colors.white,
           ),
           Padding(
             // the text inside the container for the type of the location.
-            padding: const EdgeInsets.all(3.0),
+            padding: const EdgeInsets.all(2.0),
             child: AutoSizeText(
               type == 'singlehouse' ? 'Building' : type, // just singlehouse will be shown as Building for better reading experience
               style: const TextStyle(color: Colors.white),
