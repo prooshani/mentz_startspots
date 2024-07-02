@@ -151,6 +151,6 @@ Other improvement I can imagine is that, the location card could show a Google M
 
 
 > [!IMPORTANT]
->  The only AI assisst I have used was the Copilot from the Github, which mainly used for commenting on the code. **No other AI assisstance used to write any part of the app's code**
+>  The only AI assisst I have used was the **Copilot** from the **Github**, which mainly used for commenting on the code. **No other AI assisstance used to write any part of the app's code**
 
 **Hamed Prooshani**
