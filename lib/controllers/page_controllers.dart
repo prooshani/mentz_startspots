@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:mentz_startspots/models/search_api.dart';
+import '../models/location_model.dart';
 
 class SplashScreenController extends GetxController {
 // This is the controller for the splash screen
@@ -34,7 +34,8 @@ class HomeScreenController extends GetxController {
   Rx<TextEditingController> searchController = TextEditingController().obs; // The controller of the search box. This variable is observed by Getx.
   Rx<GlobalKey> formKey = GlobalKey<FormState>().obs; // The global key of the form for validation purposes. This variable is observed by Getx and will be updated when the user types in the search box
   RxString errorMessage = ''.obs; // The error message for the search box. This variable is observed by Getx and validate on submit
-  RxList locationsList = [].obs; // The list of locations that will be displayed as search results. This List is observed by Getx and will be updated when the search is submitted and completed
+  RxList<LocationModel> locationsList =
+      <LocationModel>[].obs; // The list of locations that will be displayed as search results. This List is observed by Getx and will be updated when the search is submitted and completed
   RxBool isSearching = false.obs; // A boolean variable that will be true while the search is in progress. This variable is observed by Getx and will be update the UI when the search is in progress
   RxBool hasNetwork = false.obs; // An observed boolean variable that will be true if the device has an active network connection. In case of no network connection, the search will not be performed
 
@@ -81,19 +82,20 @@ class HomeScreenController extends GetxController {
 
   // The method will create a card widget for each location in the search results
   // The card will include the location's name, type,  coordinates, and assigned stops and its distance (if available)
-  Widget locationCard(Map<String, dynamic> location, index) {
+  Widget locationCard(LocationModel location, index) {
     RxBool expandedCard = false.obs; // An observerd bolean to check if the card is expanded for extra information or not
     RxBool expansionEnd = false.obs; // An observed boolean to check if the card expansion animation is ended or not
     RxDouble extraHeight = 0.0.obs; // An observed double to be added to the height of the card when it expanded. This is a dynamic value according to the number of assigned stops
-    List stopsList = []; // A list of assigned stops to the location
+    // List<Stop> stopsList = []; // A list of assigned stops to the location
 
-    if (location['assignedStops'] != null) {
+    if (location.assignedStops.isNotEmpty) {
       // According to the number of stops, it will calculate the extra height to be added to the card. Each stop should add 22 pixels to the card height
-      extraHeight.value = (location['assignedStops'].length * 22).toDouble();
-      stopsList.addAll(location['assignedStops']); // Add the assigned stops to the stopsList if available
+      extraHeight.value = (location.assignedStops.length * 22).toDouble();
+
+      // stopsList.addAll(location.assignedStops); // Add the assigned stops to the stopsList if available
     } else {
       extraHeight.value = 0.0; // If there are no assigned stops, the extra height will be 0
-      stopsList.clear(); // If there are no assigned stops, the stopsList will be cleared
+      // stopsList.clear(); // If there are no assigned stops, the stopsList will be cleared
     }
 
     // This part will return the card widget for each location in the search results of the main UI
@@ -115,16 +117,16 @@ class HomeScreenController extends GetxController {
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border(
               bottom: BorderSide(
-                  color: location['isBest'] == true ? Colors.greenAccent : Colors.amber,
+                  color: location.isBest == true ? Colors.greenAccent : Colors.amber,
                   width: 3), // If the location isBest as a match result, the border color will be green. Otherwise, it will be amber
             ),
           ),
           child: ListTile(
             isThreeLine: true,
-            leading: leadingTitle(location['type']), // The leading title of the card. It will show the type of the location. defined in the leadingTitle method.
+            leading: leadingTitle(location.type), // The leading title of the card. It will show the type of the location. defined in the leadingTitle method.
             title: AutoSizeText(
               // To prevent overflow, the title of the card is an AutoSizeText widget which changes the font size according to the text length
-              location['disassembledName'] ?? '', // The name of the location
+              location.name, // The name of the location
               style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               maxLines: 1,
               minFontSize: 12,
@@ -135,7 +137,7 @@ class HomeScreenController extends GetxController {
               children: [
                 AutoSizeText(
                   // To prevent overflow, the subtitle of the card is an AutoSizeText widget which changes the font size according to the text length
-                  location['parent']['name'] ?? '', // The name of locality of the location
+                  location.locality, // The name of locality of the location
                   style: const TextStyle(color: Colors.black87),
                   maxLines: 1,
                   minFontSize: 12,
@@ -154,12 +156,12 @@ class HomeScreenController extends GetxController {
                                 children: [
                                   const Icon(Icons.location_on, color: Colors.black87, size: 18),
                                   Text(
-                                    '${location['coord'][0]}, ${location['coord'][1]}', // The coordinates of the location
+                                    '${location.coordinates[0]}, ${location.coordinates[1]}', // The coordinates of the location
                                     style: const TextStyle(color: Colors.black87),
                                   ),
                                 ],
                               ),
-                              location.containsKey('assignedStops') // check to find if there are assignedStops to the location or not
+                              location.assignedStops.isNotEmpty // check to find if there are assignedStops to the location or not
                                   //if yes, show them below the coordinates of the location
                                   ? Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
@@ -168,9 +170,9 @@ class HomeScreenController extends GetxController {
                                         height: extraHeight.value, // calculate the height of the listview according to the number of assigned stops
                                         child: ListView.builder(
                                           // create a listview for the assigned stops
-                                          itemCount: location['assignedStops'].length,
+                                          itemCount: location.assignedStops.length,
                                           itemBuilder: (context, index) {
-                                            var stop = stopsList[index];
+                                            var stop = location.assignedStops[index];
                                             return assignedStopsInfo(stop); // create a widget for each assigned stop. defined in the assignedStopsInfo method
                                           },
                                         ),
@@ -253,7 +255,7 @@ class HomeScreenController extends GetxController {
   }
 
   // This method will create the assigned stops info widget for each assigned stop to the location
-  Widget assignedStopsInfo(stop) {
+  Widget assignedStopsInfo(Stop stop) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -262,7 +264,7 @@ class HomeScreenController extends GetxController {
           child: AutoSizeText(
             // To prevent overflow, the text of the assigned stop is an AutoSizeText widget which changes the font size according to the text length
             // this part will show the name of the stop and its distance (if available) in the assigned stops list. if there is no distance, it will show only the name of the stop
-            stop['distance'] != null ? '${stop['name']} (${stop['distance'] ?? '?'}m)' : '${stop['name']}',
+            stop.distance != 0.0 ? '${stop.name} (${stop.distance}m)' : '$stop.name',
             style: const TextStyle(color: Colors.black87),
             maxLines: 1,
             minFontSize: 12,
@@ -285,36 +287,42 @@ class HomeScreenController extends GetxController {
       try {
         // create the search request URL based on the user's input in the search box for API call
         // This API which looks like a RESTful, is used to search for stop locations in the MVV API
-        var searchRequestUrl = Uri.https('mvvvip1.defas-fgi.de', '/mvv/XML_STOPFINDER_REQUEST', {
-          'language': 'de',
-          'outputFormat': 'RapidJSON',
-          'coordOutputFormat': 'WGS84[DD:ddddd]',
-          'type_sf': 'any',
-          'name_sf': searchController.value.text, // the user's input in the search box
-        });
-
         // Await the http get response, then decode the json-formatted response.
-        var response = await http.get(searchRequestUrl);
-        if (response.statusCode == 200) {
+        ApiResponse response = await ApiResponse.searchCall(searchController.value.text);
+
+        if (response.status == 200) {
           // check if the response status code is 200 (OK)
           isSearching.value = false; // set the isSearching variable to false to hide the loading indicator after the search is completed
           // decode the json-formatted response and store the locations in the locationsList variable. It will be decode in utf8 format for non-enlish characters
-          Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
 
-          locationsList.addAll(jsonResponse['locations']); // add the extracted locations to the locationsList
+          var decodedLocations = await ApiResponse.apiResponseDecode(response.data);
+          for (var location in decodedLocations['locations']) {
+            locationsList.add(LocationModel(
+              name: location['disassembledName'],
+              type: location['type'],
+              locality: location['parent']['name'],
+              matchQuality: location['matchQuality'],
+              isBest: location['isBest'],
+              coordinates: location['coord'],
+              assignedStops: location['assignedStops'] != null
+                  ? List<Stop>.from(location['assignedStops'].map((x) => Stop(name: x['name'], distance: x['distance'].toDouble(), duration: x['duration'].toDouble())))
+                  : [],
+            ));
+          }
 
           // Sort results by matchQuality (higher is better match)
-          locationsList.sort((a, b) => b['matchQuality'].compareTo(a['matchQuality']));
+          locationsList.sort((a, b) => b.matchQuality.compareTo(a.matchQuality));
         } else {
           isSearching.value = false; // stop the loading indicator. Even on errors user should know that the search is finished
           // if the response status code is not 200 (OK), show an error message as a snackbar to display the error message
-          Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: ${response.statusCode}',
+          Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: ${ResponseCode.errorHandling(response.status)}',
               icon: const Icon(Icons.error), borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white70, snackPosition: SnackPosition.BOTTOM);
         }
       } catch (e) {
         // if there is an error during the search, show an error message as a snackbar to display the error message
         isSearching.value = false; // stop the loading indicator. Even on errors user should know that the search is finished
-        Get.snackbar('Error', 'Something Went Wrong! Please try again later, \nError: $e',
+
+        Get.snackbar('Error', 'Something Went Wrong! Please try again later, \n${ResponseCode.exceptionHandling(e)}',
             icon: const Icon(Icons.error), borderWidth: 3, borderColor: Colors.redAccent, colorText: Colors.red, backgroundColor: Colors.white70, snackPosition: SnackPosition.BOTTOM);
       }
     } else {
